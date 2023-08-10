@@ -1,4 +1,4 @@
-#include "../include/realtime_config.h"
+#include "realtime_config.h"
 
 
 void set_process_priority()

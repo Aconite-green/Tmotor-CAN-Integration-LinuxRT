@@ -31,7 +31,7 @@ int set_blocking_mode(int hsocket, int enable_block)
     return fcntl(hsocket, F_SETFL, flag);
 }
 
-int set_timeout(int hsocket, struct timeval tv) // 변경된 시그니처
+int set_timeout(int hsocket, struct timeval tv) 
 {
     int result;
 
