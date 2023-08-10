@@ -121,18 +121,27 @@ void exitControlmode(struct can_frame *frame, int can_id)
 
 void stop_motor(struct can_frame *frame, int can_id)
 {
+    
+    /// convert floats to unsigned ints ///
+    int p_int = 0;
+    int v_int = 0;
+    int kp_int =0;
+    int kd_int =0;
+    int t_int = 0;
+    
     // Set CAN frame id and data length code
     frame->can_id = can_id & CAN_SFF_MASK; // Replace YOUR_CAN_ID with the appropriate id
     frame->can_dlc = 8;                    // Data Length Code is set to maximum allowed length
+
     /// pack ints into the can buffer ///
-    frame->data[0] = 0; // Position 8 higher
-    frame->data[1] = 0; // Position 8 lower
-    frame->data[2] = 0; // Speed 8 higher
-    frame->data[3] = 0; // Speed 4 bit lower KP 4bit higher
-    frame->data[4] = 0; // KP 8 bit lower
-    frame->data[5] = 0; // Kd 8 bit higher
-    frame->data[6] = 0; // KP 4 bit lower torque 4 bit higher
-    frame->data[7] = 0; // torque 4 bit lower
+    frame->data[0] = p_int >> 8;                           // Position 8 higher
+    frame->data[1] = p_int & 0xFF;                         // Position 8 lower
+    frame->data[2] = v_int >> 4;                           // Speed 8 higher
+    frame->data[3] = ((v_int & 0xF) << 4) | (kp_int >> 8); // Speed 4 bit lower KP 4bit higher
+    frame->data[4] = kp_int & 0xFF;                        // KP 8 bit lower
+    frame->data[5] = kd_int >> 4;                          // Kd 8 bit higher
+    frame->data[6] = ((kd_int & 0xF) << 4) | (t_int >> 8); // KP 4 bit lower torque 4 bit higher
+    frame->data[7] = t_int & 0xff;                         // torque 4 bit lower
 }
 
 int kbhit(void)

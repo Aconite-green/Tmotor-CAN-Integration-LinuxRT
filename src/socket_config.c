@@ -31,14 +31,9 @@ int set_blocking_mode(int hsocket, int enable_block)
     return fcntl(hsocket, F_SETFL, flag);
 }
 
-int set_timeout(int hsocket, int usec)
+int set_timeout(int hsocket, struct timeval tv) // 변경된 시그니처
 {
-    struct timeval tv;
     int result;
-
-    memset(&tv, 0, sizeof(tv));
-    tv.tv_sec = 0;
-    tv.tv_usec = usec;
 
     result = setsockopt(hsocket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
     if (result < 0)
@@ -122,7 +117,7 @@ int configure_socket(int hsocket, int enable_block, struct timeval tv, struct ca
 
     if (enable_block)
     {
-        result = set_timeout(hsocket, TIMEOUT_VALUE_USEC);
+        result = set_timeout(hsocket, tv);
         if (result < 0)
         {
             return ERR_SOCKET_CONFIGURE_FAILURE;

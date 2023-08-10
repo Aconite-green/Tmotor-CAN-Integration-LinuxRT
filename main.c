@@ -46,7 +46,7 @@ int main()
     }
 
     // Set socket options
-    struct timeval timeout = {.tv_sec = 0, .tv_usec = 10000}; // 10ms
+    struct timeval timeout = {.tv_sec = 0, .tv_usec = 1000000}; // 1000ms
     struct can_filter rfilter[4] = {
         {.can_id = 0x123, .can_mask = CAN_SFF_MASK},
         {.can_id = 0x200, .can_mask = 0x700},
@@ -108,6 +108,31 @@ int main()
         send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
         printf("Motor %d set to Control mode.\n", container.motors[i].id);
         getchar();
+    }
+
+    getchar();
+
+    // Stop motors and exit control mode
+    for (int i = 0; i < container.num_motors; i++)
+    {
+        int socket_index;
+
+        if (container.motors[i].id <= 3)
+        {
+            socket_index = CAN0_INDEX;
+        }
+        else
+        {
+            socket_index = CAN1_INDEX;
+        }
+
+        stop_motor(&frame, container.motors[i].id);
+        send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
+        printf("Motor %d stopped.\n", container.motors[i].id);
+
+        exitControlmode(&frame, container.motors[i].id);
+        send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
+        printf("Motor %d exit control mode.\n", container.motors[i].id);
     }
 
     getchar();
