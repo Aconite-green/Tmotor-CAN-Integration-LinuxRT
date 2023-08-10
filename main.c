@@ -72,13 +72,13 @@ int main()
     container.num_motors = sizeof(Tmotors) / sizeof(Motor);
     memcpy(container.motors, Tmotors, sizeof(Tmotors));
 
-    // Get motor limits based on their IDs
     for (int i = 0; i < container.num_motors; i++)
     {
-        MotorLimits *limits = get_motor_limits_by_id(&container, container.motors[i].id);
+        MotorLimits *limits = get_motor_limits(container.motors[i].type);
         if (limits != NULL)
         {
             container.motors[i].limits = *limits;
+            free(limits); // Don't forget to free the dynamically allocated memory
         }
     }
 
