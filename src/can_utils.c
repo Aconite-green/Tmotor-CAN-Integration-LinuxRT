@@ -233,7 +233,7 @@ void send_frame_and_receive_reply(int hsocket, struct can_frame *frame, Motor mo
     else
     {
         // Error on select
-        printf("in func3\n");
+
         perror("select");
     }
 }

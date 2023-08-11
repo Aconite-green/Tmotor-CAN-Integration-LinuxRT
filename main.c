@@ -19,9 +19,60 @@
 #include "can_utils.h"
 
 #define PI 3.142592
-#define CAN0_INDEX 0
 #define CAN1_INDEX 1
+#define CAN2_INDEX 0
 #define DEG_TO_RAD PI / 180
+
+void find_motor_id(int hsocket)
+{
+    struct can_frame frame;
+
+    for (int motor_id = 1; motor_id <= 127; motor_id++)
+    {
+        // 모터 ID를 설정해보세요.
+        // 여기에서 필요한 방식으로 ID를 설정하면 됩니다.
+        enterControlmode(&frame, motor_id);
+        send(hsocket, &frame, sizeof(struct can_frame), 0);
+
+        struct timeval tv;
+        fd_set read_fds;
+
+        // Set timeout value
+        tv.tv_sec = 1; // 1 second
+        tv.tv_usec = 0;
+
+        // Initialize file descriptor set
+        FD_ZERO(&read_fds);
+        FD_SET(hsocket, &read_fds);
+
+        // Wait until timeout or data received
+        int result = select(hsocket + 1, &read_fds, NULL, NULL, &tv);
+
+        // If data is available, read it
+        if (result > 0)
+        {
+            result = recv(hsocket, &frame, sizeof(struct can_frame), MSG_DONTROUTE | MSG_CONFIRM);
+            if (result <= 0)
+            {
+                check_socket_error(result, "recv");
+            }
+            else
+            {
+                // 여기서 신호를 확인하고 현재 모터의 ID 값을 알 수 있습니다.
+                printf("Motor with ID %d is found.\n", motor_id);
+                sleep(1);
+            }
+        }
+        else if (result == 0)
+        {
+            printf("Timeout reached for motor ID %d. Continuing to next ID.\n", motor_id);
+        }
+        else
+        {
+            perror("select");
+        }
+    }
+}
 
 int main()
 {
@@ -82,6 +133,10 @@ int main()
         }
     }
 
+    // FIne motor ID
+    //find_motor_id(sockets[0]);
+
+    getchar();
     // Control motors based on their sockets
     for (int i = 0; i < container.num_motors; i++)
     {
@@ -89,27 +144,27 @@ int main()
 
         // Motor 1,2,3 uses can0 (socket index 0)
         // Motor 4,5,6 uses can1 (socket index 1)
-        if (container.motors[i].id <= 3)
+        if (container.motors[i].id > 3)
         {
-            socket_index = CAN0_INDEX;
+            socket_index = CAN1_INDEX;
         }
         else
         {
-            socket_index = CAN1_INDEX;
+            socket_index = CAN2_INDEX;
         }
 
         // Set motor to 0
         set_to_zero(&frame, container.motors[i].id);
         send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
         printf("Motor %d set to zero.\n", container.motors[i].id);
-
+        sleep(1);
         // Set motor to Control mode
         enterControlmode(&frame, container.motors[i].id);
         send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
-        printf("Motor %d set to Control mode.\n", container.motors[i].id);
-        getchar();
+        printf("Motor %d set to Control mode.\n\n", container.motors[i].id);
+        sleep(1);
     }
-
+    printf("dont press anything all baljag");
     getchar();
 
     // Stop motors and exit control mode
@@ -117,22 +172,24 @@ int main()
     {
         int socket_index;
 
-        if (container.motors[i].id <= 3)
-        {
-            socket_index = CAN0_INDEX;
-        }
-        else
+        if (container.motors[i].id > 3)
         {
             socket_index = CAN1_INDEX;
         }
+        else
+        {
+            socket_index = CAN2_INDEX;
+        }
 
-        stop_motor(&frame, container.motors[i].id);
+        // stop motors
+        pack_cmd(container.motors[i].limits, &frame, container.motors[i].id, 0, 0, 0, 0, 0);
         send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
         printf("Motor %d stopped.\n", container.motors[i].id);
-
+        sleep(1);
         exitControlmode(&frame, container.motors[i].id);
         send_frame_and_receive_reply(sockets[socket_index], &frame, container.motors[i]);
-        printf("Motor %d exit control mode.\n", container.motors[i].id);
+        printf("Motor %d exit control mode.\n\n", container.motors[i].id);
+        sleep(1);
     }
 
     getchar();
@@ -167,11 +224,11 @@ int main()
 
                     if (container.motors[i].id <= 3)
                     {
-                        socket_index = CAN0_INDEX;
+                        socket_index = CAN1_INDEX;
                     }
                     else
                     {
-                        socket_index = CAN1_INDEX;
+                        socket_index = CAN2_INDEX;
                     }
 
                     // Pack motor commands and send frame
@@ -225,11 +282,11 @@ int main()
 
         if (container.motors[i].id <= 3)
         {
-            socket_index = CAN0_INDEX;
+            socket_index = CAN1_INDEX;
         }
         else
         {
-            socket_index = CAN1_INDEX;
+            socket_index = CAN2_INDEX;
         }
 
         stop_motor(&frame, container.motors[i].id);
