@@ -156,7 +156,7 @@ This header file contains the necessary functions to interface with the CAN prot
 - **enterControlmode**: Puts the motor into control mode. Supported only in Tmotor's MIT mode.
 - **exitControlmode**: Exits the control mode of the motor. Supported only in Tmotor's MIT mode.
 - **stop_motor**: Stops the motor. Supported only in Tmotor's MIT mode.
-- **send_frame_and_receive_reply**: Sends a frame and receives a reply from the motor. Supported only in Tmotor's MIT mode.
+- **send_frame_and_receive_reply**: Sends a frame and receives a reply from the motor. 
 
 
 #### 2. error_handling.h
