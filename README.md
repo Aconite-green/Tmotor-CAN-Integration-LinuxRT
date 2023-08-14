@@ -149,14 +149,15 @@ void configure_realtime()
 ### Importing the Required Libraries
 
 #### 1. can_utils.h
-This header file contains the necessary functions to interface with the CAN protocol for motor control. Functions are provided to pack and unpack commands, enter or exit control modes, stop the motor, and send frames with replies. It also includes relevant motor and error handling headers.
+This header file contains the necessary functions to interface with the CAN protocol for motor control, specifically with Tmotor's MIT mode. Functions are provided to pack and unpack commands, enter or exit control modes, stop the motor, and send frames with replies. Most of these functions generate canframe values that are supported only in Tmotor's MIT mode. It also includes relevant motor and error handling headers.
 
-- **pack_cmd**: Packs the command for motor control.
-- **unpack_reply**: Unpacks the reply from the motor.
-- **enterControlmode**: Puts the motor into control mode.
-- **exitControlmode**: Exits the control mode of the motor.
-- **stop_motor**: Stops the motor.
-- **send_frame_and_receive_reply**: Sends a frame and receives a reply from the motor.
+- **pack_cmd**: Packs the command for motor control. Supported only in Tmotor's MIT mode.
+- **unpack_reply**: Unpacks the reply from the motor. Supported only in Tmotor's MIT mode.
+- **enterControlmode**: Puts the motor into control mode. Supported only in Tmotor's MIT mode.
+- **exitControlmode**: Exits the control mode of the motor. Supported only in Tmotor's MIT mode.
+- **stop_motor**: Stops the motor. Supported only in Tmotor's MIT mode.
+- **send_frame_and_receive_reply**: Sends a frame and receives a reply from the motor. Supported only in Tmotor's MIT mode.
+
 
 #### 2. error_handling.h
 This file includes functions that deal with error handling, providing specific functions to display an error message and exit the program, or to check for socket communication errors.
