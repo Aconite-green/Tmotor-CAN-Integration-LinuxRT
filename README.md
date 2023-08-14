@@ -148,8 +148,54 @@ void configure_realtime()
 
 ### Importing the Required Libraries
 
-- Steps to import necessary libraries.
-- Explanation of what each library does in the code.
+#### 1. can_utils.h
+This header file contains the necessary functions to interface with the CAN protocol for motor control. Functions are provided to pack and unpack commands, enter or exit control modes, stop the motor, and send frames with replies. It also includes relevant motor and error handling headers.
+
+- **pack_cmd**: Packs the command for motor control.
+- **unpack_reply**: Unpacks the reply from the motor.
+- **enterControlmode**: Puts the motor into control mode.
+- **exitControlmode**: Exits the control mode of the motor.
+- **stop_motor**: Stops the motor.
+- **send_frame_and_receive_reply**: Sends a frame and receives a reply from the motor.
+
+#### 2. error_handling.h
+This file includes functions that deal with error handling, providing specific functions to display an error message and exit the program, or to check for socket communication errors.
+
+- **error_exit**: Displays an error message and exits the program.
+- **check_socket_error**: Checks for an error in socket communication.
+
+#### 3. motor.h
+Defines structures and constants related to motors, including motor limits and commands. This file allows for the storage and manipulation of motor-related data.
+
+- **MotorLimits**: Structure defining the limits for various motor parameters.
+- **Motor**: Structure defining the motor's type and ID.
+- **MotorCommand**: Structure to encapsulate motor commands.
+- **MotorContainer**: Structure containing multiple motors.
+
+#### 4. path_manager.h
+Manages paths for motor commands, including loading commands from CSV files and packing them into command structures.
+
+- **Buffer**: Structure to hold motor commands.
+- **load_motor_commands_from_csv**: Loads motor commands from a CSV file.
+- **pack_cmd_and_save_to_csv**: Packs commands and saves them to a CSV file.
+
+#### 5. realtime_config.h
+Handles real-time configuration for the application, including setting the process priority and configuring real-time settings.
+
+- **set_process_priority**: Sets the priority of the process.
+- **configure_realtime**: Configures real-time settings for the process.
+
+#### 6. socket_config.h
+Contains functions to configure and manipulate sockets for CAN communication, including creating, configuring, setting buffer size, loopback, timeouts, and other socket-related functionalities.
+
+- **create_socket**: Creates a socket for communication.
+- **configure_sockets**: Configures multiple sockets with various options.
+- **set_blocking_mode**: Sets the blocking mode for a socket.
+- **set_timeout**: Sets the timeout for a socket.
+- **set_buffer_size**: Sets the buffer size for a socket.
+- **set_loopback**: Sets the loopback mode for a socket.
+- **set_recv_own_msgs**: Sets the socket to receive its own messages.
+
 
 ### Sending Motor Control Signals
 
