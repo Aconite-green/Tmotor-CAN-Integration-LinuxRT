@@ -204,7 +204,11 @@ In this project, three motors are connected to each CAN port of the Adventech co
 - Description of how the code uses the clock_t object (CPU tick) to send motor control signals every 10ms.
 - Examples of how to modify this part of the code to customize the behavior of the motors.
 
-## Interfacing with Tmotor
+### Interfacing with Tmotor
+
+#### Using MIT Mode
+
+- Details about using MIT mode with Tmotor, including its benefits, configuration, and how it was specifically utilized in this project.
 
 ### Contacting Tmotor
 
@@ -215,6 +219,7 @@ In this project, three motors are connected to each CAN port of the Adventech co
 
 - Description of how to create a repository for Tmotor control.
 - Steps to follow when uploading code or updates to the repository.
+
 
 ## License
 
