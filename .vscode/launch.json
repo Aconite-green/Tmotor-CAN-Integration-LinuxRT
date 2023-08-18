@@ -1,0 +1,33 @@
+{
+  "name": "Debug Main",
+  "type": "cppdbg",
+  "request": "launch",
+  "program": [{
+    "${workspaceFolder}/Tmotor-CAN-Integration-LinuxRT-main/main",
+    "${workspaceFolder}/Tmotor-CAN-Integration-LinuxRT-main/include",
+  },]
+    "args": [],
+  "stopAtEntry": true,
+  "cwd": "${workspaceFolder}",
+  "environment": [],
+  "externalConsole": false,
+  "MIMode": "gdb",
+  "setupCommands": [
+    {
+      "description": "Enable pretty-printing for gdb",
+      "text": "-enable-pretty-printing",
+      "ignoreFailures": true
+    }
+  ],
+  "preLaunchTask": "build", // 필요에 따라 빌드 작업을 참조
+  "miDebuggerPath": "/usr/bin/gdb",
+  "linux": {
+    "MIMode": "gdb"
+  },
+  "windows": {
+    "MIMode": "gdb"
+  },
+  "osx": {
+    "MIMode": "lldb"
+  }
+}

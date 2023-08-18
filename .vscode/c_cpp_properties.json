@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Tmotor-CAN-Integration-LinuxRT-main/include" // 이 부분을 추가
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
