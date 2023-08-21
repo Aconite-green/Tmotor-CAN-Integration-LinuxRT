@@ -1,3 +1,37 @@
+# Enable CONFIG_PREEMPT_RT
+ -> General Setup
+  -> Preemption Model (Fully Preemptible Kernel (Real-Time))
+   (X) Fully Preemptible Kernel (Real-Time)
+
+# Enable CONFIG_HIGH_RES_TIMERS
+ -> General setup
+  -> Timers subsystem
+   [*] High Resolution Timer Support
+
+# Enable CONFIG_NO_HZ_FULL
+ -> General setup
+  -> Timers subsystem
+   -> Timer tick handling (Full dynticks system (tickless))
+    (X) Full dynticks system (tickless)
+
+# Set CONFIG_HZ_1000 (note: this is no longer in the General Setup menu, go back twice)
+ -> Processor type and features
+  -> Timer frequency (1000 HZ)
+   (X) 1000 HZ
+
+# Set CPU_FREQ_DEFAULT_GOV_PERFORMANCE [=y]
+ ->  Power management and ACPI options
+  -> CPU Frequency scaling
+   -> CPU Frequency scaling (CPU_FREQ [=y])
+    -> Default CPUFreq governor (<choice> [=y])
+     (X) performance
+
+# Cryptographic API > Module signature verification 경로를 찾아 비활성화
+
+# Kernel hacking
+-> Compile-time checks and compiler options
+-> Compile kernel with BTF type information
+
 # Realtime Motor Control Project
 
 This project provides a guide on how to control six AK10-9 motors (Tmotor Company) in real-time using an embedded computer (Adventech). 
