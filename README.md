@@ -104,9 +104,42 @@ A real-time kernel is a kernel that guarantees to process certain events or data
 
 2. **Follow detailed instructions** on how to install the real-time kernel.
 
-3. **Configure the kernel** to suit the project's needs. This can involve setting certain kernel parameters or enabling/disabling certain features.
+# Enable CONFIG_PREEMPT_RT
+ -> General Setup
+  -> Preemption Model (Fully Preemptible Kernel (Real-Time))
+   (X) Fully Preemptible Kernel (Real-Time)
 
-4. **Verify that the kernel is configured correctly.** This can be done by checking the kernel version or the enabled features.
+# Enable CONFIG_HIGH_RES_TIMERS
+ -> General setup
+  -> Timers subsystem
+   [*] High Resolution Timer Support
+
+# Enable CONFIG_NO_HZ_FULL
+ -> General setup
+  -> Timers subsystem
+   -> Timer tick handling (Full dynticks system (tickless))
+    (X) Full dynticks system (tickless)
+
+# Set CONFIG_HZ_1000 (note: this is no longer in the General Setup menu, go back twice)
+ -> Processor type and features
+  -> Timer frequency (1000 HZ)
+   (X) 1000 HZ
+
+# Set CPU_FREQ_DEFAULT_GOV_PERFORMANCE [=y]
+ ->  Power management and ACPI options
+  -> CPU Frequency scaling
+   -> CPU Frequency scaling (CPU_FREQ [=y])
+    -> Default CPUFreq governor (<choice> [=y])
+     (X) performance
+# Kernel hacking
+-> Compile-time checks and compiler options
+-> Compile kernel with BTF type information
+
+# Cryptographic API > Module signature verification 경로를 찾아 비활성화합니다.
+
+4. **Configure the kernel** to suit the project's needs. This can involve setting certain kernel parameters or enabling/disabling certain features.
+
+5. **Verify that the kernel is configured correctly.** This can be done by checking the kernel version or the enabled features.
 
 ### Applying the Real-time Kernel in Code
 
