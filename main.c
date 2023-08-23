@@ -13,10 +13,10 @@
 #include <linux/can/raw.h>
 
 // User Defined
-#include "socket_config.h"
-#include "realtime_config.h"
-#include "motor.h"
-#include "can_utils.h"
+#include "./include/socket_config.h"
+#include "./include/realtime_config.h"
+#include "./include/motor.h"
+#include "./include/can_utils.h"
 
 #define PI 3.142592
 #define CAN0_INDEX 0
@@ -75,9 +75,11 @@ void find_motor_id(int hsocket)
 
 int main()
 {
+getchar();
 
     // Real-time configuration
     configure_realtime();
+
 
     // Define socket interfaces
     const char *interfaces[] = {"can0", "can1"};
