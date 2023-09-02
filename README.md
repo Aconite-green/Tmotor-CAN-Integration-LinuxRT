@@ -1,40 +1,8 @@
-# Enable CONFIG_PREEMPT_RT
- -> General Setup
-  -> Preemption Model (Fully Preemptible Kernel (Real-Time))
-   (X) Fully Preemptible Kernel (Real-Time)
 
-# Enable CONFIG_HIGH_RES_TIMERS
- -> General setup
-  -> Timers subsystem
-   [*] High Resolution Timer Support
-
-# Enable CONFIG_NO_HZ_FULL
- -> General setup
-  -> Timers subsystem
-   -> Timer tick handling (Full dynticks system (tickless))
-    (X) Full dynticks system (tickless)
-
-# Set CONFIG_HZ_1000 (note: this is no longer in the General Setup menu, go back twice)
- -> Processor type and features
-  -> Timer frequency (1000 HZ)
-   (X) 1000 HZ
-
-# Set CPU_FREQ_DEFAULT_GOV_PERFORMANCE [=y]
- ->  Power management and ACPI options
-  -> CPU Frequency scaling
-   -> CPU Frequency scaling (CPU_FREQ [=y])
-    -> Default CPUFreq governor (<choice> [=y])
-     (X) performance
-
-# Cryptographic API > Module signature verification 경로를 찾아 비활성화
-
-# Kernel hacking
--> Compile-time checks and compiler options
--> Compile kernel with BTF type information
 
 # Realtime Motor Control Project
 
-This project provides a guide on how to control six AK10-9 motors (Tmotor Company) in real-time using an embedded computer (Adventech). 
+This project provides a guide on how to control six AK70-10 motors (Tmotor Company) in real-time using an embedded computer (Adventech). 
 
 ## Table of Contents
 
@@ -138,78 +106,11 @@ A real-time kernel is a kernel that guarantees to process certain events or data
 
 2. **Follow detailed instructions** on how to install the real-time kernel.
 
-# Enable CONFIG_PREEMPT_RT
- -> General Setup
-  -> Preemption Model (Fully Preemptible Kernel (Real-Time))
-   (X) Fully Preemptible Kernel (Real-Time)
-
-# Enable CONFIG_HIGH_RES_TIMERS
- -> General setup
-  -> Timers subsystem
-   [*] High Resolution Timer Support
-
-# Enable CONFIG_NO_HZ_FULL
- -> General setup
-  -> Timers subsystem
-   -> Timer tick handling (Full dynticks system (tickless))
-    (X) Full dynticks system (tickless)
-
-# Set CONFIG_HZ_1000 (note: this is no longer in the General Setup menu, go back twice)
- -> Processor type and features
-  -> Timer frequency (1000 HZ)
-   (X) 1000 HZ
-
-# Set CPU_FREQ_DEFAULT_GOV_PERFORMANCE [=y]
- ->  Power management and ACPI options
-  -> CPU Frequency scaling
-   -> CPU Frequency scaling (CPU_FREQ [=y])
-    -> Default CPUFreq governor (<choice> [=y])
-     (X) performance
-# Kernel hacking
--> Compile-time checks and compiler options
--> Compile kernel with BTF type information
-
-# Cryptographic API > Module signature verification 경로를 찾아 비활성화합니다.
 
 4. **Configure the kernel** to suit the project's needs. This can involve setting certain kernel parameters or enabling/disabling certain features.
 
 5. **Verify that the kernel is configured correctly.** This can be done by checking the kernel version or the enabled features.
 
-### Applying the Real-time Kernel in Code
-
-We have applied the real-time kernel in our code to ensure that certain tasks are executed within a strict deadline. We have separated the process into two functions for improved readability, and all these functions are invoked in `configure_realtime()`. Here is the updated example:
-
-```c
-void set_process_priority()
-{
-    // Set process to max priority for reliable real-time execution
-    int result = setpriority(PRIO_PROCESS, 0, MAX_PRIORITY);
-    if (result == -1)
-    {
-        perror("setpriority failed");
-        exit(-1);
-    }
-}
-
-void configure_scheduler()
-{
-    // Set up a real-time, absolute deadline scheduler
-    struct sched_param param;
-    param.sched_priority = sched_get_priority_max(SCHEDULING_POLICY);
-    int result = sched_setscheduler(0, SCHEDULING_POLICY, &param);
-    if (result == -1)
-    {
-        perror("sched_setscheduler failed");
-        exit(-1);
-    }
-}
-
-void configure_realtime()
-{
-    set_process_priority();
-    configure_scheduler();
-}
-```
 
 ## Code Usage
 
@@ -247,13 +148,7 @@ Manages paths for motor commands, including loading commands from CSV files and 
 - **load_motor_commands_from_csv**: Loads motor commands from a CSV file.
 - **pack_cmd_and_save_to_csv**: Packs commands and saves them to a CSV file.
 
-#### 5. realtime_config.h
-Handles real-time configuration for the application, including setting the process priority and configuring real-time settings.
-
-- **set_process_priority**: Sets the priority of the process.
-- **configure_realtime**: Configures real-time settings for the process.
-
-#### 6. socket_config.h
+#### 5. socket_config.h
 Contains functions to configure and manipulate sockets for CAN communication, including creating, configuring, setting buffer size, loopback, timeouts, and other socket-related functionalities.
 
 - **create_socket**: Creates a socket for communication.
