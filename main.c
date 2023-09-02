@@ -23,55 +23,6 @@
 #define CAN1_INDEX 1
 #define DEG_TO_RAD PI / 180
 
-void find_motor_id(int hsocket)
-{
-    struct can_frame frame;
-
-    for (int motor_id = 1; motor_id <= 127; motor_id++)
-    {
-        // 모터 ID를 설정해보세요.
-        // 여기에서 필요한 방식으로 ID를 설정하면 됩니다.
-        enterControlmode(&frame, motor_id);
-        send(hsocket, &frame, sizeof(struct can_frame), 0);
-        sleep(1);
-        struct timeval tv;
-        fd_set read_fds;
-
-        // Set timeout value
-        tv.tv_sec = 1; // 1 second
-        tv.tv_usec = 0;
-
-        // Initialize file descriptor set
-        FD_ZERO(&read_fds);
-        FD_SET(hsocket, &read_fds);
-
-        // Wait until timeout or data received
-        int result = select(hsocket + 1, &read_fds, NULL, NULL, &tv);
-
-        // If data is available, read it
-        if (result > 0)
-        {
-            result = recv(hsocket, &frame, sizeof(struct can_frame), MSG_DONTROUTE | MSG_CONFIRM);
-            if (result <= 0)
-            {
-                check_socket_error(result, "recv");
-            }
-            else
-            {
-                // 여기서 신호를 확인하고 현재 모터의 ID 값을 알 수 있습니다.
-                printf("Motor with ID %d is found.\n", motor_id);
-            }
-        }
-        else if (result == 0)
-        {
-            printf("Timeout reached for motor ID %d. Continuing to next ID.\n", motor_id);
-        }
-        else
-        {
-            perror("select");
-        }
-    }
-}
 
 int main()
 {
@@ -82,7 +33,7 @@ getchar();
 
 
     // Define socket interfaces
-    const char *interfaces[] = {"can0", "can1"};
+    const char *interfaces[] = {"can0", "can1", "can2"};
     int socket_count = sizeof(interfaces) / sizeof(interfaces[0]);
     int sockets[socket_count];
 
@@ -113,11 +64,11 @@ getchar();
 
     // Initialize motors
     Motor Tmotors[] = {
-        {"AK70_10", 6, {0, 0, 0}},
-        {"AK70_10", 6, {0, 0, 0}},
-        {"AK70_10", 6, {0, 0, 0}},
-        {"AK70_10", 6, {0, 0, 0}},
-        {"AK70_10", 6, {0, 0, 0}},
+        {"AK70_10", 1, {0, 0, 0}},
+        {"AK70_10", 2, {0, 0, 0}},
+        {"AK70_10", 3, {0, 0, 0}},
+        {"AK70_10", 4, {0, 0, 0}},
+        {"AK70_10", 5, {0, 0, 0}},
         {"AK70_10", 6, {0, 0, 0}}};
 
     MotorContainer container;
