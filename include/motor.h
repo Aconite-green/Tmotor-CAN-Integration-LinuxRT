@@ -1,5 +1,6 @@
 // motor.h 파일
-#pragma once
+#ifndef MOTOR_H
+#define MOTOR_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,3 +42,5 @@ typedef struct {
 MotorContainer* get_motor_container();
 MotorLimits* get_motor_limits(const char *motortype);
 MotorLimits *get_motor_limits_by_id(MotorContainer *container, int id);
+
+#endif

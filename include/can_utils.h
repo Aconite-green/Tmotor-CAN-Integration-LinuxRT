@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAN_UTILS_H
+#define CAN_UTILS_H
 
 #include <linux/can.h>
 #include <math.h>
@@ -20,3 +21,5 @@ void exitControlmode(struct can_frame *frame, int can_id);
 int kbhit(void);
 void stop_motor(struct can_frame *frame, int can_id);
 void send_frame_and_receive_reply(int hsocket, struct can_frame *frame, Motor motor);
+
+#endif

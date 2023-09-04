@@ -85,7 +85,7 @@ getchar();
         }
     }
 
-  
+    int result, iter;
     // Control motors based on their sockets
     for (int i = 0; i < container.num_motors; i++)
     {
